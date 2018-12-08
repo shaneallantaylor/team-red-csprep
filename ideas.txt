@@ -1,0 +1,19 @@
+1. Pokemon Battle Sequence
+	HP, attacks, defend
+	closure
+
+2. Tic tac toe
+3. Five in a row
+4. Number Guessing
+
+Game that uses Objects
+Username (Closure)
+
+Attack
+Defend
+Third Choice
+
+Computer vs Player
+
+Computer does action to player
+player does action to computer
