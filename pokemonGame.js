@@ -27,7 +27,16 @@ const mainPlayer = {
     winSlogan: 'Haha! I win',
     loseSlogan: 'You got lucky'
   }
-    
+  function promptUserInfo(player1) {
+      const userName = window.prompt('What is your name?', 'Ryan');
+      player1.name = userName;
+      const userPokemon = window.prompt('What is your pokemon name?', 'Willmon')
+      player1.pokemon = userPokemon;
+      const userAttackName = window.prompt('What is your favorite attack move?', 'Codeblast')
+      player1.attackName = userAttackName;
+      const userDefendName = window.prompt('What is your defense move?', 'codeshield')
+      player1.defendName = userDefendName;
+  }
   function introMessage(player1, player2){
     //the introduction message to the game
     return player1.name + ' has entered the arena with his pokemon ' + player1.pokemon + '! Get ready to battle ' + player2.name + ' with his pokemon ' + player2.pokemon + '!';
@@ -36,6 +45,7 @@ const mainPlayer = {
   // console.log(introMessage(mainPlayer, computer1));
   
   function gameSequence(player1, player2, p1Action, p2Action) {
+      window.alert(promptUserInfo(player1));
       window.alert(introMessage(player1, player2));
       function inner() {
       if (hpChecker(player1, player2) === false) {
