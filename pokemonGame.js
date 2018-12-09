@@ -12,20 +12,20 @@ const mainPlayer = {
     defendName: 'codeshield',
     defendValue: 1,
     defendFreq: 0,
-    winSlogan: 'Yay! I won',
-    loseSlogan: 'Oh man'
+    winSlogan: 'Yay! I won!',
+    loseSlogan: 'Oh man...'
   }
 // this is the first computer-controlled opponent  
   const computer1 = {
-    name: 'Rival',
+    name: 'Gary',
     pokemon: 'Rivalmon',
     hp: 2,
-    attackName: 'attack',
+    attackName: 'fire blast',
     attackValue: 2, 
-    defendName: 'defend',
+    defendName: 'super shield',
     defendValue: 1,
-    winSlogan: 'Haha! I win',
-    loseSlogan: 'You got lucky'
+    winSlogan: 'Haha! I win!',
+    loseSlogan: 'You got lucky...'
   }
   function promptUserInfo(player1) {
       const userName = window.prompt('What is your name?', 'Ryan');
@@ -34,18 +34,19 @@ const mainPlayer = {
       player1.pokemon = userPokemon;
       const userAttackName = window.prompt('What is your favorite attack move?', 'Codeblast')
       player1.attackName = userAttackName;
-      const userDefendName = window.prompt('What is your defense move?', 'codeshield')
-      player1.defendName = userDefendName;
+      const userWinSlogan = window.prompt('What is your winning catch phrase?', 'Yay, I won')
+      player1.winSlogan = userWinSlogan;
+      return window.alert('Pikachu: Thanks for the info! Get ready for the POKEMON GAME!!!')
   }
   function introMessage(player1, player2){
     //the introduction message to the game
-    return player1.name + ' has entered the arena with his pokemon ' + player1.pokemon + '! Get ready to battle ' + player2.name + ' with his pokemon ' + player2.pokemon + '!';
+    return player1.name + ' and his pokemon ' + player1.pokemon + ' have entered the area!\nGet ready to battle ' + player2.name + ' and his pokemon ' + player2.pokemon + '...  *dun dun dun*';
   }
   //intro test...
   // console.log(introMessage(mainPlayer, computer1));
   
   function gameSequence(player1, player2, p1Action, p2Action) {
-      window.alert(promptUserInfo(player1));
+      promptUserInfo(player1);
       window.alert(introMessage(player1, player2));
       function inner() {
       if (hpChecker(player1, player2) === false) {
@@ -74,15 +75,15 @@ const mainPlayer = {
 		if (p1Action === 1 && p2Action === 1) {
       player1.hp = player1.hp - player2.attackValue;
       player2.hp = player2.hp - player1.attackValue;
-      return "the message if both players attack";
+      return player2.pokemon + ' attacks with ' + player2.attackName + ' for ' + player2.attackValue + ' damage!\n' + player1.pokemon + ' attacks with ' + player1.attackName + ' for ' + player1.attackValue + ' damage!';
     } else if (p1Action === 1 && p2Action === 2) {
       player2.hp = player2.hp - (player1.attackValue - player2.defendValue); 
-			return player1.pokemon + 'attacks with ' + player1.attackName + 'for ' + player1.attackValue + 'damage ';
+			return player2.pokemon + ' defends with ' + player2.defendName + '!\n' + player1.pokemon + ' attacks with ' + player1.attackName + ' for ' + (player1.attackValue - player2.defendValue) + ' damage!';
     } else if (p1Action === 2 && p2Action === 1) {
       player1.hp = player1.hp - (player2.attackValue - player1.defendValue);
-      return "the message if p1 defends, and p2 attacks";
+      return player1.pokemon + ' defends with ' + player1.defendName + '!\n' + player2.pokemon + ' attacks with ' + player2.attackName + ' for ' + (player2.attackValue - player1.defendValue) + ' damage!';
     } else {
-      return "you both defended! how cowardly!";
+      return "Both pokemon defended! How cowardly!";
     }
   }
 
@@ -95,36 +96,6 @@ function hpChecker(player1, player2) {
     }
     return false;
 }
-
-// console.log(introMessage(mainPlayer, computer1));
-// console.log(battle(mainPlayer, computer1, 1, 1));
-// console.log("now the mainPlayer HP is:", mainPlayer.hp);
-// console.log("now the computer1 HP is:", computer1.hp);
-// console.log(hpChecker(mainPlayer, computer1));
-
-
-// console.log(battle(mainPlayer, computer1, 1, 2));
-// console.log("now the mainPlayer HP is:", mainPlayer.hp);
-// console.log("now the computer1 HP is:", computer1.hp);
-// console.log(battle(mainPlayer, computer1, 2, 1));
-// console.log("now the mainPlayer HP is:", mainPlayer.hp);
-// console.log("now the computer1 HP is:", computer1.hp);
-// console.log(battle(mainPlayer, computer1, 2, 2));
-// console.log("now the mainPlayer HP is:", mainPlayer.hp);
-// console.log("now the computer1 HP is:", computer1.hp);
-// console.log("hp starts at 5, expecting new hp to be 4, actual is:", computer1.hp);
-  
-  //         if (opponentAction(player2) === 'defend') {
-//         damage = player1.attackValue - player2.defendValue;  
-  
-  //if action is attack we need to look up the attacName and attackValue and store
-  //we need to apply the attackName and attackValue to the opponent and 
-  //compare attackValues withdefense value
-  //mutate the openent object with calculated values. we need to mutate the hp
-  //we need to check and see if the opponent has hp <= 0
-  //if so we need to initialiaze the victory sequence
-  //if not we need to update the turn tracker and do another battle
-
 
 
   function opponentAction(opponent) {
@@ -142,7 +113,7 @@ function hpChecker(player1, player2) {
 
   function victoryMessage(player1, player2) {
       //when the mainPlayer wins, show a message
-      return player1.name + ': ' + player1.winSlogan + '. \n' + player2.name + ': ' + player2.loseSlogan; 
+      return 'CONGRATS YOU WIN!!!\n' + player1.name + ': ' + player1.winSlogan + ' \n' + player2.name + ': ' + player2.loseSlogan; 
     }
   // victoryMessage test...   
   // console.log(victoryMessage(mainPlayer, computer1));
