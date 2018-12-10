@@ -1,6 +1,21 @@
 // This is our Pokemon game!
+// Global data
+const personNames = ["Andy", "MJ", "Shane", "Nisha", "Howard", "Jay", "Azfar", "Fahad", "Jon", "Rashmi", "Rella", "Robert", "Danni", "Ayna", "Daniel", "Franklin", "Karen", "Maurice", "Tristan"];
 
+const pokemonNames = ["Bulbasaur", "Charmander", "Squirtle", "Pikachu", "Electabuzz", "Machop", "Grimer", "Rhyhorn", "Voltorb", "Lickitung", "Scyther", "Pinsir", "Tangela", "Omanyte", "Kabuto", "Girafarig", "Stantler"];
 
+// a record of game stats
+// to be displayed upon the mainPlayers death
+const gameStats = {
+  opponentsCreated: 0,
+  opponentsDefeated: {
+    count: 0,
+    names: []
+  },
+  attacksUsed: 0,
+  damageDone: 0,
+  damageDefended: 0,
+}
 // This is the player-controlled character as an object
 const mainPlayer = {
     name: 'Ryan',
@@ -16,17 +31,63 @@ const mainPlayer = {
     loseSlogan: 'Oh man...'
   }
 // this is the first computer-controlled opponent  
-  const computer1 = {
-    name: 'Gary',
-    pokemon: 'Rivalmon',
-    hp: 2,
-    attackName: 'fire blast',
-    attackValue: 2, 
-    defendName: 'super shield',
-    defendValue: 1,
-    winSlogan: 'Haha! I win!',
-    loseSlogan: 'You got lucky...'
-  }
+  const computer2 = createNewOpponent();
+
+// constructor new opponent objects
+function TrainerOpponent(name, pokemon, hp, attackName, attackValue, defendName, defendValue, winSlogan, loseSlogan) {
+  this.name = name;
+  this.pokemon = pokemon;
+  this.hp = hp;
+  this.attackName = attackName;
+  this.attackValue = attackValue; 
+  this.defendName = defendName;
+  this.defendValue = defendValue;
+  this.winSlogan = winSlogan;
+  this.loseSlogan = loseSlogan;
+}
+// min is INCLUDED, max is EXCLUDED
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+
+
+
+function getUniqueItemFromArray(array) {
+  let i = getRandomInt(0, array.length);
+  let chosen = array[i];
+  array.splice(i, 1);
+  return chosen;
+}
+
+function createNewOpponent() {
+  // name should select random name from an array of student names
+  // name should never occur twice
+  const name = getUniqueItemFromArray(personNames);
+  // pokemon name should be selected from an array of pokemons
+  // one time use, like name
+  const pokemon = getUniqueItemFromArray(pokemonNames);
+  // hp should increment by +1 for each new opponent created
+  const hp = gameStats.opponentsCreated + 1;
+  // attack name should be selected based on which pokemon was chosen
+  const attackName = "Mega Punch";
+  // attack value should be random between 1 and 3
+  const attackValue = getRandomInt(1, 4);
+  // defend name should be selected based on which pokemon was chosen
+  const defendName = "Rock Wall";
+  // defend value should be 1 or 2
+  const defendValue = getRandomInt(1, 3);
+  const winSlogan = "The power of science is staggering!";
+  const loseSlogan = "Wow. You and your Pokemon’s power levels are amazing! They’re over 9000 for sure!";
+  
+  
+  // return new TrainerOpponent with all details
+  gameStats.opponentsCreated += 1;
+  return new TrainerOpponent(name, pokemon, hp, attackName, attackValue, defendName, defendValue, winSlogan, loseSlogan);
+}
+
+
   function promptUserInfo(player1) {
       const userName = window.prompt('What is your name?', 'Ryan');
       player1.name = userName;
@@ -61,7 +122,7 @@ const mainPlayer = {
     }
     inner();
   }
-  console.log(gameSequence(mainPlayer, computer1, 1, 2))
+  console.log(gameSequence(mainPlayer, computer2, 1, 2))
 
   function battle(player1, player2, p1Action, p2Action) {
     //this is the core of the game!!
@@ -91,24 +152,24 @@ function hpChecker(player1, player2) {
 //       console.log('this is one step before the hp check');
     if (player1.hp <= 0) {
      return gameOver(player1, player2);
-    } else if (computer1.hp <= 0) {
+    } else if (player2.hp <= 0) {
       return victoryMessage(player1, player2);
     }
     return false;
 }
 
-
-  function opponentAction(opponent) {
-    // This needs to be refactored! 
-    //generates a random number 0 or 1
-    //if it is 1 returns the string 'attack'
-    //else if it is 0 returns the string 'defend'
-    let choice = parseInt(Math.random(0, 3) * Math.floor(2));
-    if(choice === 1){
+// core function
+// used to determine the action take by the npc
+// can adjust getRandomInt arguments to capture more npc options
+  function opponentAction() {
+    let choice = getRandomInt(1,3);
+    if(choice === 1) {
       return 'attack'
-    }
-    return 'defend' 
+    } else {
+	    return 'defend' 
+	}
   }
+
 
 
   function victoryMessage(player1, player2) {
