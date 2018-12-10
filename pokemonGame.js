@@ -101,7 +101,7 @@ function createNewOpponent() {
   }
   function introMessage(player1, player2){
     //the introduction message to the game
-    return player1.name + ' and his pokemon ' + player1.pokemon + ' have entered the area!\nGet ready to battle ' + player2.name + ' and his pokemon ' + player2.pokemon + '...  *dun dun dun*';
+    return player1.name + ' and their pokemon ' + player1.pokemon + ' have entered the area!\nGet ready to battle ' + player2.name + ' and their pokemon ' + player2.pokemon + '...  *dun dun dun*';
   }
   //intro test...
   // console.log(introMessage(mainPlayer, computer1));
