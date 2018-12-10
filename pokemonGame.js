@@ -20,7 +20,7 @@ const gameStats = {
 const mainPlayer = {
     name: 'Ryan',
     pokemon: 'Willmon',
-    hp: 10,
+    hp: 4,
     attackName: 'codeblast',
     attackValue: 2, 
     attackFreq: 0,
@@ -29,6 +29,20 @@ const mainPlayer = {
     defendFreq: 0,
     winSlogan: 'Yay! I won!',
     loseSlogan: 'Oh man...'
+  }
+
+  const bossPlayer = {
+    name: 'the Boss',
+    pokemon: 'Bowser',
+    hp: 6,
+    attackName: 'Ultimate Smash',
+    attackValue: 3, 
+    attackFreq: 0,
+    defendName: 'codeshield',
+    defendValue: 1,
+    defendFreq: 0,
+    winSlogan: 'No one can defeat me!!',
+    loseSlogan: 'It....it\'s impossible....'
   }
 // this is the first computer-controlled opponent  
   const computer2 = createNewOpponent();
@@ -101,30 +115,30 @@ function createNewOpponent() {
   }
   function introMessage(player1, player2){
     //the introduction message to the game
-    return player1.name + ' and their pokemon ' + player1.pokemon + ' have entered the area!\nGet ready to battle ' + player2.name + ' and their pokemon ' + player2.pokemon + '...  *dun dun dun*';
+    return player1.name + ' and their pokemon ' + player1.pokemon + ' have entered the arena!\nGet ready to battle ' + player2.name + ' and their pokemon ' + player2.pokemon + '...';
   }
   //intro test...
   // console.log(introMessage(mainPlayer, computer1));
   
-function gameSequence(player1, player2, p1Action, p2Action) {
+function gameSequence(player1, player2, p1Action, p2Action, called) {
+      if (called !== true) {
       promptUserInfo(player1);
-  		window.alert(introMessage(player1, player2));
+      }
+      window.alert(introMessage(player1, player2));
+      
       function inner() {
       if (hpChecker(player1, player2) === false) {
         //if no player is dead
         window.alert(battle(player1, player2, p1Action, p2Action));
-        //call the inner again (recursion)
+        //call the inner again
         inner();
       } else {
           //otherwise show the alert message
-          window.alert(hpChecker(player1, player2));
-       	 window.alert(introMessage(player1, player2));
-        	inner();
+          return hpChecker(player1, player2);
       }
     }
     inner();
   }
-  console.log(gameSequence(mainPlayer, computer2, 1, 2))
   
   
   function battle(player1, player2, p1Action, p2Action) {
@@ -139,29 +153,36 @@ function gameSequence(player1, player2, p1Action, p2Action) {
     //let p1Action = parseInt(Math.random(0, 3) * Math.floor(2));
     p2Action = parseInt(getRandomInt(1,3));
     
+    
   //if statement for the action taken 
 		if (p1Action === 1 && p2Action === 1) {
+      player1.attackFreq += 1;
       player1.hp = player1.hp - player2.attackValue;
       player2.hp = player2.hp - player1.attackValue;
-      return player2.pokemon + ' attacks with ' + player2.attackName + ' for ' + player2.attackValue + ' damage!\n' + player1.pokemon + ' attacks with ' + player1.attackName + ' for ' + player1.attackValue + ' damage!';
+      return 'You: ' + player1.pokemon + ' attack with ' + player1.attackName + '!\n...Opponent\'s ' + player2.pokemon + ' takes ' + player1.attackValue + ' damage.\nOppenent: ' + player2.pokemon + ' attack with ' + player2.attackName + '!\n...Your ' + player1.pokemon + ' takes ' + player2.attackValue + ' damage!';
     } else if (p1Action === 1 && p2Action === 2) {
+      player1.attackFreq += 1;
       player2.hp = player2.hp - (player1.attackValue - player2.defendValue); 
-			return player2.pokemon + ' defends with ' + player2.defendName + '!\n' + player1.pokemon + ' attacks with ' + player1.attackName + ' for ' + (player1.attackValue - player2.defendValue) + ' damage!';
+			return  'You: ' + player1.pokemon + ' attack with ' + player1.attackName + '! \nOpponent: ' + player2.pokemon + ' defend!\n...' + player2.pokemon + ' only takes ' + (player1.attackValue - player2.defendValue) + ' damage.';
     } else if (p1Action === 2 && p2Action === 1) {
+      player1.defendFreq += 1;
       player1.hp = player1.hp - (player2.attackValue - player1.defendValue);
-      return player1.pokemon + ' defends with ' + player1.defendName + '!\n' + player2.pokemon + ' attacks with ' + player2.attackName + ' for ' + (player2.attackValue - player1.defendValue) + ' damage!';
-    } else {
-      return "Both pokemon defended! How cowardly!";
+      return 'You: ' + player1.pokemon + ' defend!\nOpponent: ' + player2.pokemon + ' attack with ' + player2.attackName + '!\n...Your pokemon ' + player1.pokemon + ' only takes ' + (player2.attackValue - player1.defendValue) + ' damage.';
+    } else if (p1Action === 2 && p2Action === 2)  {
+      player1.defendFreq += 1;
+      return 'You: ' + player1.pokemon + ' defend!\nOpponent: ' + player2.pokemon + ' defend!\n...Both pokemon defend.';
+    } else{
+     window.alert("Please press 1 or 2 only")
+     return battle(player1, player2, p1Action, p2Action)
     }
   }
 
-function hpChecker(player1, player2, p1Action, p2Action) {
+function hpChecker(player1, player2) {
 //       console.log('this is one step before the hp check');
     if (player1.hp <= 0) {
      return gameOver(player1, player2);
     } else if (player2.hp <= 0) {
-      window.alert(victoryMessage(player1, player2));
-      
+      return victoryMessage(player1, player2); 
     }
     return false;
 }
@@ -182,15 +203,26 @@ function hpChecker(player1, player2, p1Action, p2Action) {
 
   function victoryMessage(player1, player2) {
       //when the mainPlayer wins, show a message
-      return 'CONGRATS YOU WIN!!!\n' + player1.name + ': ' + player1.winSlogan + ' \n' + player2.name + ': ' + player2.loseSlogan; 
+      window.alert('CONGRATS YOU WIN!!!\n' + player1.name + ': ' + player1.winSlogan + ' \n' + player2.name + ': ' + player2.loseSlogan);
+      const replay = window.prompt("Are you ready to play the next opponent?\nPress y: 'Yes! Bring it on!'\nPress n: 'No, I need some rest...");
+      if (replay === 'n' || replay === 'N') {
+        return window.alert("Thanks for playing!");
+      } else if (replay === 'y' || replay === 'Y') {
+        gameSequence(mainPlayer, bossPlayer, null, p2Action = parseInt(getRandomInt(1,3)), called = true);
+      } else {
+        window.alert("Please press 'y' or 'n' only")
+        replay = window.prompt("Are you ready to play the next opponent?\nPress y: 'Yes! Bring it on!'\nPress n: 'No, I need some rest...");
+      }
     }
-  // victoryMessage test...   
+  // victoryMessage test...    
   // console.log(victoryMessage(mainPlayer, computer1));
     
-  
   function gameOver(player1, player2) {
       //when the mainPlayer loses, show a message
-      return player2.name + ': ' + player2.winSlogan + '\n'+ player1.name + ': ' + player1.loseSlogan + '\nGAME OVER...\n\n    Player Stats\nAttack Frequency: ' + player1.attackFreq + '\nDefend Frequency: ' + player1.defendFreq; 
+      return player2.name + ': ' + player2.winSlogan + '\n'+ player1.name + ': ' + player1.loseSlogan + '\nGAME OVER...\n\n    Player Stats\nAttack Frequency: ' + player1.attackFreq + '\nDefend Frequency: ' + player1.defendFreq;
     }
   //gameover test...
 //console.log(gameOver(mainPlayer, computer1));
+
+//starts the pokemon game!
+console.log(gameSequence(mainPlayer, computer2, null, null))
