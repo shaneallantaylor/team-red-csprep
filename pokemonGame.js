@@ -97,18 +97,18 @@ function createNewOpponent() {
       player1.attackName = userAttackName;
       const userWinSlogan = window.prompt('What is your winning catch phrase?', 'Yay, I won')
       player1.winSlogan = userWinSlogan;
-      return window.alert('Pikachu: Thanks for the info! Get ready for the POKEMON GAME!!!')
+      return window.alert('Thanks for the info! Get ready for the POKEMON GAME!!!')
   }
   function introMessage(player1, player2){
     //the introduction message to the game
-    return player1.name + ' and his pokemon ' + player1.pokemon + ' have entered the area!\nGet ready to battle ' + player2.name + ' and his pokemon ' + player2.pokemon + '...  *dun dun dun*';
+    return player1.name + ' and their pokemon ' + player1.pokemon + ' have entered the area!\nGet ready to battle ' + player2.name + ' and their pokemon ' + player2.pokemon + '...  *dun dun dun*';
   }
   //intro test...
   // console.log(introMessage(mainPlayer, computer1));
   
-  function gameSequence(player1, player2, p1Action, p2Action) {
+function gameSequence(player1, player2, p1Action, p2Action) {
       promptUserInfo(player1);
-      window.alert(introMessage(player1, player2));
+  		window.alert(introMessage(player1, player2));
       function inner() {
       if (hpChecker(player1, player2) === false) {
         //if no player is dead
@@ -118,19 +118,26 @@ function createNewOpponent() {
       } else {
           //otherwise show the alert message
           window.alert(hpChecker(player1, player2));
+       	 window.alert(introMessage(player1, player2));
+        	inner();
       }
     }
     inner();
   }
   console.log(gameSequence(mainPlayer, computer2, 1, 2))
-
+  
+  
   function battle(player1, player2, p1Action, p2Action) {
     //this is the core of the game!!
     //input is 2 player objects and their choices
     //output returning the updated hp info for both players
     
     //PROMPT mainPlayer for an action
-    
+    let  p11Action = prompt('Press 1: Attack, Press 2: Defend');
+    p1Action = parseInt(p11Action)
+  	console.clear()
+    //let p1Action = parseInt(Math.random(0, 3) * Math.floor(2));
+    p2Action = parseInt(getRandomInt(1,3));
     
   //if statement for the action taken 
 		if (p1Action === 1 && p2Action === 1) {
@@ -148,12 +155,13 @@ function createNewOpponent() {
     }
   }
 
-function hpChecker(player1, player2) {
+function hpChecker(player1, player2, p1Action, p2Action) {
 //       console.log('this is one step before the hp check');
     if (player1.hp <= 0) {
      return gameOver(player1, player2);
     } else if (player2.hp <= 0) {
-      return victoryMessage(player1, player2);
+      window.alert(victoryMessage(player1, player2));
+      
     }
     return false;
 }
