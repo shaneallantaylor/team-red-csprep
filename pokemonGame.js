@@ -22,7 +22,7 @@ const mainPlayer = {
     pokemon: 'Willmon',
     hp: 10,
     attackName: 'codeblast',
-    attackValue: 2, 
+    attackValue: 3, 
     attackFreq: 0,
     defendName: 'codeshield',
     defendValue: 1,
